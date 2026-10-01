@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baby shower</title>
+<meta name="description" content="Te invitamos a nuestro baby shower y revelación. Domingo 25 de octubre de 2026, 3:00 pm.">
+<!-- Vista previa al compartir el link (WhatsApp, Facebook, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://diegomo-ux.github.io/Baby-shower/">
+<meta property="og:title" content="Baby shower · ¿Niño o niña? 🎈">
+<meta property="og:description" content="Hay una sorpresa para ti. Domingo 25 de octubre, 3:00 pm. Toca para abrir tu invitación.">
+<meta property="og:image" content="https://diegomo-ux.github.io/Baby-shower/preview.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Invitación al baby shower: ¿Niño o niña?">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://diegomo-ux.github.io/Baby-shower/preview.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ================= PALETA ================= */
+  :root{
+    --lila:#c9b8ee;  --lila-o:#8e7cc3;
+    --menta:#bfe8d8; --menta-o:#4f9e83;
+    --mante:#ffe39a; --mante-o:#d9a53a;
+    --durazno:#ffd3b5;
+    --tinta:#5b4a72; --tinta-2:#7c6d90;
+    --rosa:#f7c3d3;  --rosa-o:#c9718f;   /* solo votación */
+    --azul:#b9d8f5;  --azul-o:#4f84b8;   /* solo votación */
+    --titulo:'Baloo 2',system-ui,sans-serif;
+    --texto:'Nunito',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:18px;scroll-behavior:smooth}
+  body{
+    font-family:var(--texto);color:var(--tinta);overflow-x:hidden;min-height:100vh;
+    background:linear-gradient(180deg,#ece5fa 0%,#f5effb 30%,#fbf3f0 65%,#fff6e6 100%);
+    background-color:#f5effb;
+  }
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  :focus-visible{outline:3px solid var(--lila-o);outline-offset:4px;border-radius:12px}
+  svg{display:block;overflow:visible}
+
+  /* Texto "inflado" en 3D (el sello de esta propuesta) */
+  .puff{
+    font-family:var(--titulo);font-weight:800;color:#a08ad9;line-height:.92;letter-spacing:-.01em;
+    text-shadow:0 1px 0 #9681d2,0 2px 0 #8f7acc,0 3px 0 #8873c6,0 4px 0 #816cc0,0 5px 0 #7a66b9,
+                0 10px 14px rgba(91,74,114,.28);
+  }
+  .puff-sm{
+    font-family:var(--titulo);font-weight:800;color:#a08ad9;line-height:1;
+    text-shadow:0 1px 0 #8f7acc,0 2px 0 #8873c6,0 3px 0 #7a66b9,0 7px 10px rgba(91,74,114,.22);
+  }
+
+  /* ================= ANIMACIONES ================= */
+  @keyframes flotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes mecer{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+  @keyframes girar{to{transform:rotate(360deg)}}
+  @keyframes agitar{0%,100%{transform:rotate(0)}20%{transform:rotate(-7deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-5deg)}80%{transform:rotate(3deg)}}
+  @keyframes latir{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  @keyframes flama{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.25)}}
+  @keyframes rebote{0%{transform:scale(1)}30%{transform:scale(1.25) rotate(-8deg)}60%{transform:scale(.92) rotate(6deg)}100%{transform:scale(1)}}
+  @keyframes subir{to{transform:translateY(calc(-100vh - 240px))}}
+  @keyframes temblor{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  @keyframes despegar{0%{transform:translateY(0)}15%{transform:translateY(6px)}100%{transform:translateY(-130vh)}}
+  .flota{animation:flotar 5s ease-in-out infinite}
+  .rebota{animation:rebote .6s ease}
+
+  /* ================= GLOBOS DE FONDO ================= */
+  #globos{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+  .g-wrap{position:absolute;bottom:-160px;pointer-events:auto;cursor:pointer;animation:subir linear forwards}
+  .g-wrap .bola{width:56px;height:68px;border-radius:50% 50% 47% 47%/55% 55% 45% 45%;position:relative;animation:mecer 3.4s ease-in-out infinite;transform-origin:50% 150%;box-shadow:inset -8px -10px 16px rgba(91,74,114,.15)}
+  .g-wrap .bola::after{content:"";position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);border:5px solid transparent;border-bottom:7px solid var(--c);border-top:0}
+  .g-wrap .hilo{position:absolute;left:50%;top:100%;width:1.5px;height:80px;background:linear-gradient(var(--c),transparent)}
+
+  canvas#confeti{position:fixed;inset:0;pointer-events:none;z-index:70}
+
+  /* ================= CAJA SORPRESA (entrada) ================= */
+  #intro{
+    position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:14px;padding:24px;text-align:center;
+    background:radial-gradient(ellipse at 50% 40%,#fbf7ff 0%,#efe7fb 55%,#e4daf6 100%);
+    transition:opacity .9s ease .9s, visibility 0s linear 1.8s;
+  }
+  #intro.fuera{opacity:0;visibility:hidden}
+  .intro-1{font-family:var(--titulo);font-weight:700;font-size:1.9rem;color:var(--tinta)}
+  #caja{width:min(240px,62vw);animation:latir 2.2s ease-in-out infinite}
+  #caja.agita{animation:agitar .45s ease}
+  #tapa{transform-box:fill-box;transform-origin:50% 100%;transition:transform .8s cubic-bezier(.3,1.5,.5,1),opacity .8s ease .2s}
+  #intro.abierta #tapa{transform:translate(50px,-190px) rotate(32deg);opacity:0}
+  .intro-2{font-size:1.15rem;font-weight:700;color:var(--tinta-2)}
+  .intro-3{font-size:.95rem;color:var(--tinta-2);opacity:.8}
+  .signo{position:absolute;font-family:var(--titulo);font-weight:800;font-size:2.6rem;color:#b9a6ea;animation:flotar 4s ease-in-out infinite}
+
+  /* ================= MÚSICA ================= */
+  #musica{
+    position:fixed;right:16px;bottom:16px;z-index:55;width:58px;height:58px;border-radius:50%;
+    display:none;align-items:center;justify-content:center;color:#fff;
+    background:radial-gradient(circle at 35% 30%,#efe7ff,#b9a6ea 55%,#8e7cc3);
+    box-shadow:0 10px 22px rgba(91,74,114,.3),inset 0 -4px 8px rgba(91,74,114,.2);
+  }
+  #musica.ver{display:flex}
+  #musica svg{width:24px;height:24px}
+  #musica.sonando svg{animation:girar 5s linear infinite}
+  #musica.pausa{filter:grayscale(.7)}
+
+  /* ================= ESTRUCTURA ================= */
+  main{position:relative;z-index:2;max-width:540px;margin:0 auto;padding:10px 18px 110px;text-align:center}
+  section{position:relative;padding:34px 0}
+  h2{font-family:var(--titulo);font-weight:800;font-size:2.4rem;line-height:1.05;color:var(--tinta)}
+  .p{font-size:1.2rem;line-height:1.6;color:var(--tinta-2);max-width:440px;margin:12px auto 0}
+  .punto{position:absolute;border-radius:50%;pointer-events:none;box-shadow:inset -2px -3px 4px rgba(91,74,114,.12)}
+
+  /* ----- 1. Arcoíris ----- */
+  .escena-arco svg{width:100%;max-width:420px;margin:0 auto}
+  .rayos{transform-box:fill-box;transform-origin:center;animation:girar 30s linear infinite}
+  .hebra{transform-box:view-box;animation:mecer 4s ease-in-out infinite}
+  .bs{font-family:var(--titulo);font-weight:600;font-size:1.6rem;color:var(--menta-o);margin-top:-10px}
+  h1.puff{font-size:clamp(3.5rem,16vw,5.4rem);margin:6px 0 4px}
+
+  /* ----- 2. Globo aerostático + fecha ----- */
+  .viaje{display:flex;flex-direction:column;align-items:center;animation:flotar 6s ease-in-out infinite}
+  .viaje > svg{width:190px}
+  .nube-card{
+    position:relative;width:min(340px,100%);margin-top:-2px;padding:30px 24px 26px;border-radius:70px;
+    background:radial-gradient(ellipse at 40% 20%,#ffffff 0%,#fbf9ff 50%,#ece6f8 100%);
+    box-shadow:0 18px 34px rgba(91,74,114,.16),inset 0 -8px 16px rgba(142,124,195,.12);
+  }
+  .nube-card::before,.nube-card::after{
+    content:"";position:absolute;border-radius:50%;
+    background:radial-gradient(circle at 40% 30%,#fff,#f6f2fd 70%);z-index:-1
+  }
+  .nube-card::before{width:120px;height:120px;top:-44px;left:22px}
+  .nube-card::after{width:96px;height:96px;top:-30px;right:28px}
+  .dia{font-family:var(--titulo);font-weight:700;font-size:1.5rem;color:var(--tinta-2)}
+  .num{font-size:6.4rem;margin:2px 0 -6px}
+  .mes{font-family:var(--titulo);font-weight:700;font-size:1.9rem;color:var(--tinta)}
+  .linea-est{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px 0 8px;color:var(--mante-o)}
+  .linea-est::before,.linea-est::after{content:"";width:56px;height:3px;border-radius:3px;background:var(--mante)}
+  .hora{font-size:3.4rem}
+
+  /* ----- 3. Cuenta regresiva ----- */
+  .burbujas{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+  .burbuja{aspect-ratio:1;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    box-shadow:0 12px 22px rgba(91,74,114,.16),inset -6px -8px 14px rgba(91,74,114,.12)}
+  .burbuja b{font-family:var(--titulo);font-weight:800;font-size:2.6rem;line-height:1;color:var(--tinta)}
+  .burbuja span{font-size:.85rem;font-weight:700;color:var(--tinta-2)}
+  .b1{background:radial-gradient(circle at 32% 28%,#fff,#e2d8fa 40%,#c9b8ee)}
+  .b2{background:radial-gradient(circle at 32% 28%,#fff,#dcf3ea 40%,#bfe8d8)}
+  .b3{background:radial-gradient(circle at 32% 28%,#fff,#fff0c6 40%,#ffe39a)}
+  .b4{background:radial-gradient(circle at 32% 28%,#fff,#ffe6d6 40%,#ffd3b5)}
+
+  /* ----- 4. Votación ----- */
+  #nombreVoto{
+    width:100%;max-width:330px;margin-top:20px;padding:15px 20px;border-radius:40px;border:2px solid transparent;
+    background:#fff;text-align:center;font:600 1.15rem var(--texto);color:var(--tinta);outline:none;
+    box-shadow:0 8px 20px rgba(91,74,114,.1),inset 0 -3px 0 #efe9fa
+  }
+  #nombreVoto::placeholder{color:#a99cbc}
+  #nombreVoto:focus{border-color:var(--lila)}
+  #nombreVoto.error{border-color:var(--rosa-o);animation:temblor .4s}
+  .estrellas{position:relative;display:flex;justify-content:center;gap:26px;margin-top:22px;padding-bottom:40px}
+  .estrellas .base{position:absolute;left:50%;bottom:0;width:min(380px,100%);transform:translateX(-50%);pointer-events:none}
+  .voto{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:4px;transition:transform .3s,opacity .3s,filter .3s}
+  .voto svg{width:128px}
+  .voto span{font-family:var(--titulo);font-weight:800;font-size:1.5rem}
+  .voto[data-equipo="nina"] span{color:var(--rosa-o)}
+  .voto[data-equipo="nino"] span{color:var(--azul-o)}
+  .voto:hover{transform:translateY(-6px)}
+  .voto.elegido{transform:scale(1.1)}
+  .voto.apagado{opacity:.45;filter:saturate(.4);transform:scale(.9)}
+  .voto .estrella{transform-box:fill-box;transform-origin:center;animation:flotar 4s ease-in-out infinite}
+  .voto[data-equipo="nino"] .estrella{animation-delay:-2s}
+  #mensajeVoto{min-height:30px;margin-top:6px;font-size:1.25rem;font-weight:700}
+
+  .marcador{margin:22px auto 0;max-width:380px}
+  .marcador[hidden]{display:none}
+  .marcador h3{font-family:var(--titulo);font-weight:700;font-size:1.3rem;color:var(--tinta)}
+  .barra{display:flex;height:26px;border-radius:20px;overflow:hidden;margin:10px 0 6px;background:#efe9fa;
+    box-shadow:inset 0 2px 4px rgba(91,74,114,.12)}
+  .barra i{display:block;transition:width 1s cubic-bezier(.3,1.2,.4,1)}
+  #barraNina{background:linear-gradient(180deg,#fbd9e4,#e9a3bb)}
+  #barraNino{background:linear-gradient(180deg,#d6e9fb,#93bde4)}
+  .leyenda{display:flex;justify-content:space-between;font-weight:700;font-size:1.05rem}
+  .leyenda .l1{color:var(--rosa-o)} .leyenda .l2{color:var(--azul-o)}
+  .total{font-size:.95rem;color:var(--tinta-2);margin-top:4px}
+
+  /* ----- 5. Cohete + ubicación ----- */
+  .plataforma{position:relative;height:190px}
+  #cohete{position:absolute;left:50%;bottom:0;width:96px;margin-left:-48px;animation:flotar 3s ease-in-out infinite}
+  #cohete.vuela{animation:despegar 1.6s cubic-bezier(.5,0,.8,.4) forwards}
+  #cohete .fuego{transform-box:fill-box;transform-origin:50% 0;animation:flama .25s ease-in-out infinite}
+  #cohete.vuela .fuego{animation-duration:.1s}
+  .btn-mapa{
+    display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:17px 30px;border-radius:50px;text-decoration:none;
+    font:800 1.3rem var(--titulo);color:#fff;
+    background:linear-gradient(180deg,#b6a2ea,#8e7cc3);
+    box-shadow:0 6px 0 #6f5ea6,0 16px 26px rgba(91,74,114,.28);transition:transform .15s,box-shadow .15s
+  }
+  .btn-mapa:active{transform:translateY(4px);box-shadow:0 2px 0 #6f5ea6,0 8px 14px rgba(91,74,114,.28)}
+  .btn-mapa svg{width:24px;height:24px}
+
+  /* ----- 6. Cierre ----- */
+  .confirma{margin-top:8px;font-size:1.25rem;line-height:1.55;color:var(--tinta-2)}
+  .confirma strong{display:block;font-family:var(--titulo);font-weight:800;font-size:1.9rem;line-height:1.1;color:var(--tinta);margin-bottom:6px}
+  .final .puff{font-size:clamp(3rem,13vw,4.2rem);margin-top:26px}
+  .firma{font-size:1.2rem;font-weight:700;color:var(--tinta-2);margin-top:10px}
+  .pista{font-size:.95rem;color:var(--tinta-2);opacity:.75;margin-top:22px}
+
+  @media (max-width:480px){
+    html{font-size:16px}
+    .num{font-size:5.6rem}
+    .burbujas{gap:8px}
+    .burbuja b{font-size:2.2rem}
+    .voto svg{width:112px}
+    .estrellas{gap:14px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= DIBUJOS 3D (degradados y figuras) ================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="gl" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#f3edff"/><stop offset=".5" stop-color="#c9b8ee"/><stop offset="1" stop-color="#9a86d3"/></radialGradient>
+    <radialGradient id="gl2" cx=".35" cy=".25" r=".8"><stop offset="0" stop-color="#e6dcff"/><stop offset=".55" stop-color="#b5a1e6"/><stop offset="1" stop-color="#8a76c6"/></radialGradient>
+    <radialGradient id="gm" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#effbf6"/><stop offset=".5" stop-color="#bfe8d8"/><stop offset="1" stop-color="#84c8ae"/></radialGradient>
+    <radialGradient id="gy" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#fffae6"/><stop offset=".5" stop-color="#ffe39a"/><stop offset="1" stop-color="#eebf55"/></radialGradient>
+    <radialGradient id="gd" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#fff3ea"/><stop offset=".5" stop-color="#ffd3b5"/><stop offset="1" stop-color="#eda57d"/></radialGradient>
+    <radialGradient id="gr" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#fff2f6"/><stop offset=".5" stop-color="#f7c3d3"/><stop offset="1" stop-color="#df92ad"/></radialGradient>
+    <radialGradient id="ga" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#f1f8ff"/><stop offset=".5" stop-color="#b9d8f5"/><stop offset="1" stop-color="#82b0de"/></radialGradient>
+    <radialGradient id="gn" cx=".4" cy=".25" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#faf8ff"/><stop offset="1" stop-color="#e2daf3"/></radialGradient>
+    <linearGradient id="gyL" x1="0" x2="1"><stop offset="0" stop-color="#eebf55"/><stop offset=".45" stop-color="#fff3c8"/><stop offset="1" stop-color="#eebf55"/></linearGradient>
+    <linearGradient id="gyH" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff3c8"/><stop offset="1" stop-color="#eebf55"/></linearGradient>
+    <radialGradient id="brillo" cx=".3" cy=".22" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <!-- Arcoíris: un solo degradado radial que da volumen a las 3 bandas -->
+    <radialGradient id="gArco" gradientUnits="userSpaceOnUse" cx="180" cy="200" r="150">
+      <stop offset=".333" stop-color="#efbf52"/><stop offset=".40" stop-color="#fff4cc"/><stop offset=".47" stop-color="#ffe08f"/><stop offset=".519" stop-color="#f0c35d"/>
+      <stop offset=".521" stop-color="#7fc4a9"/><stop offset=".58" stop-color="#ecfaf3"/><stop offset=".65" stop-color="#bfe8d8"/><stop offset=".705" stop-color="#8ccdb4"/>
+      <stop offset=".708" stop-color="#9f8bd6"/><stop offset=".77" stop-color="#f1eaff"/><stop offset=".84" stop-color="#cbbaf0"/><stop offset=".893" stop-color="#a28fd8"/>
+    </radialGradient>
+
+    <symbol id="nube" viewBox="0 0 120 70">
+      <path d="M22 66 a19 19 0 0 1 2-37 a25 25 0 0 1 46-11 a21 21 0 0 1 35 16 a17 17 0 0 1 -1 32 z" fill="url(#gn)"/>
+    </symbol>
+    <symbol id="cara" viewBox="0 0 40 24">
+      <ellipse cx="9" cy="7" rx="3.2" ry="3.8" fill="#4a3b5e"/><circle cx="10.2" cy="5.6" r="1.1" fill="#fff"/>
+      <ellipse cx="31" cy="7" rx="3.2" ry="3.8" fill="#4a3b5e"/><circle cx="32.2" cy="5.6" r="1.1" fill="#fff"/>
+      <path d="M15 12 Q20 18 25 12" stroke="#4a3b5e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <ellipse cx="4" cy="14" rx="4" ry="2.4" fill="#f4a7bf" opacity=".75"/><ellipse cx="36" cy="14" rx="4" ry="2.4" fill="#f4a7bf" opacity=".75"/>
+    </symbol>
+    <symbol id="estrella" viewBox="0 0 100 100">
+      <polygon points="50,9 62,37 92,39 69,58 77,88 50,72 23,88 31,58 8,39 38,37" stroke-linejoin="round" stroke-width="12"/>
+    </symbol>
+  </defs>
+</svg>
+
+<audio id="cancion" src="cancion.mp3" loop preload="auto"></audio>
+
+<!-- ================= CAJA SORPRESA ================= -->
+<div id="intro">
+  <span class="signo" style="top:16%;left:14%">?</span>
+  <span class="signo" style="top:22%;right:14%;animation-delay:-1.5s;color:#9fd8c2">?</span>
+  <span class="signo" style="bottom:20%;left:20%;animation-delay:-2.5s;color:#f3cf6c;font-size:2rem">?</span>
+  <span class="punto" style="width:14px;height:14px;top:32%;left:8%;background:#ffe39a"></span>
+  <span class="punto" style="width:10px;height:10px;top:12%;right:30%;background:#bfe8d8"></span>
+  <span class="punto" style="width:18px;height:18px;bottom:14%;right:16%;background:#c9b8ee"></span>
+  <span class="punto" style="width:9px;height:9px;bottom:30%;right:8%;background:#ffd3b5"></span>
+
+  <p class="intro-1">Hay una sorpresa para ti</p>
+  <button id="caja" aria-label="Abrir la invitación">
+    <svg viewBox="0 0 200 210">
+      <ellipse cx="100" cy="198" rx="74" ry="9" fill="#5b4a72" opacity=".13"/>
+      <rect x="34" y="92" width="132" height="100" rx="18" fill="url(#gl)"/>
+      <rect x="34" y="92" width="132" height="100" rx="18" fill="url(#brillo)"/>
+      <rect x="90" y="92" width="20" height="100" fill="url(#gyL)"/>
+      <rect x="34" y="132" width="132" height="18" fill="url(#gyH)" opacity=".95"/>
+      <g id="tapa">
+        <rect x="26" y="70" width="148" height="30" rx="13" fill="url(#gl2)"/>
+        <rect x="26" y="70" width="148" height="30" rx="13" fill="url(#brillo)"/>
+        <rect x="88" y="70" width="24" height="30" fill="url(#gyL)"/>
+        <path d="M100 70 C 66 34 50 62 70 74 C 82 80 96 73 100 70Z" fill="url(#gy)"/>
+        <path d="M100 70 C 134 34 150 62 130 74 C 118 80 104 73 100 70Z" fill="url(#gy)"/>
+        <circle cx="100" cy="70" r="10" fill="url(#gy)"/>
+      </g>
+    </svg>
+  </button>
+  <p class="intro-2">Toca la caja para abrirla</p>
+  <p class="intro-3">♪ Sube el volumen</p>
+</div>
+
+<button id="musica" aria-label="Pausar o reproducir la música">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+</button>
+
+<div id="globos"></div>
+<canvas id="confeti"></canvas>
+
+<main>
+  <!-- ================= 1. ARCOÍRIS ================= -->
+  <section class="escena-arco">
+    <svg viewBox="0 0 360 330" role="img" aria-label="Arcoíris con un sol sonriente">
+      <path d="M60 200 A120 120 0 0 1 300 200" stroke="url(#gArco)" stroke-width="28" fill="none"/>
+      <path d="M88 200 A92 92 0 0 1 272 200" stroke="url(#gArco)" stroke-width="28" fill="none"/>
+      <path d="M116 200 A64 64 0 0 1 244 200" stroke="url(#gArco)" stroke-width="28" fill="none"/>
+      <g id="movil"></g>
+      <use href="#nube" x="4" y="168" width="128" height="75"/>
+      <use href="#nube" x="228" y="168" width="128" height="75"/>
+      <g transform="translate(290 112)" class="sol">
+        <g class="rayos">
+          <g fill="url(#gy)">
+            <rect x="-6" y="-52" width="12" height="18" rx="6"/><rect x="-6" y="34" width="12" height="18" rx="6"/>
+            <rect x="-52" y="-6" width="18" height="12" rx="6"/><rect x="34" y="-6" width="18" height="12" rx="6"/>
+            <rect x="-6" y="-52" width="12" height="18" rx="6" transform="rotate(45)"/><rect x="-6" y="34" width="12" height="18" rx="6" transform="rotate(45)"/>
+            <rect x="-52" y="-6" width="18" height="12" rx="6" transform="rotate(45)"/><rect x="34" y="-6" width="18" height="12" rx="6" transform="rotate(45)"/>
+          </g>
+        </g>
+        <circle r="31" fill="url(#gy)"/>
+        <use href="#cara" x="-18" y="-6" width="36" height="22"/>
+      </g>
+      <circle cx="40" cy="70" r="7" fill="url(#gm)"/><circle cx="70" cy="40" r="4" fill="url(#gy)"/>
+      <circle cx="322" cy="40" r="5" fill="url(#gl)"/><circle cx="196" cy="60" r="4" fill="url(#gd)"/>
+    </svg>
+    <p class="bs">Baby shower</p>
+    <h1 class="puff">¿Niño o niña?</h1>
+    <p class="p">Ni nosotros lo sabemos todavía. Ven a celebrar la llegada de nuestro bebé y a descubrir juntos el gran secreto.</p>
+  </section>
+
+  <!-- ================= 2. GLOBO + FECHA ================= -->
+  <section>
+    <div class="viaje">
+      <svg viewBox="0 0 200 250" role="img" aria-label="Globo aerostático">
+        <path d="M100 18 C 152 18 178 58 172 100 C 166 140 126 160 112 182 L 88 182 C 74 160 34 140 28 100 C 22 58 48 18 100 18 Z" fill="url(#gl)"/>
+        <path d="M100 18 C 126 58 124 140 110 182 L 90 182 C 76 140 74 58 100 18 Z" fill="url(#gy)"/>
+        <path d="M100 18 C 70 30 54 110 78 170 L 84 176 C 62 120 72 50 100 18Z" fill="url(#gm)" opacity=".95"/>
+        <path d="M100 18 C 130 30 146 110 122 170 L 116 176 C 138 120 128 50 100 18Z" fill="url(#gm)" opacity=".95"/>
+        <path d="M100 18 C 152 18 178 58 172 100 C 166 140 126 160 112 182 L 88 182 C 74 160 34 140 28 100 C 22 58 48 18 100 18 Z" fill="url(#brillo)"/>
+        <path d="M89 182 L86 204 M111 182 L114 204" stroke="#b19a86" stroke-width="2"/>
+        <rect x="80" y="202" width="40" height="26" rx="7" fill="url(#gd)"/>
+        <path d="M84 211 h32 M84 219 h32" stroke="#e39a73" stroke-width="2" opacity=".6"/>
+        <path d="M86 228 L64 250 M114 228 L136 250" stroke="#b19a86" stroke-width="2"/>
+      </svg>
+      <div class="nube-card">
+        <p class="dia">Domingo</p>
+        <p class="puff num">25</p>
+        <p class="mes">de octubre, 2026</p>
+        <div class="linea-est" aria-hidden="true">★</div>
+        <p class="puff-sm hora">3:00 pm</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. CUENTA REGRESIVA ================= -->
+  <section>
+    <h2>Faltan</h2>
+    <div class="burbujas">
+      <div class="burbuja b1"><b id="d">00</b><span>días</span></div>
+      <div class="burbuja b2"><b id="h">00</b><span>horas</span></div>
+      <div class="burbuja b3"><b id="m">00</b><span>min</span></div>
+      <div class="burbuja b4"><b id="s">00</b><span>seg</span></div>
+    </div>
+  </section>
+
+  <!-- ================= 4. VOTACIÓN ================= -->
+  <section>
+    <h2>¿Tú qué crees que será?</h2>
+    <p class="p">Vístete de <b style="color:var(--azul-o)">azul</b> si crees que es niño o de <b style="color:var(--rosa-o)">rosa</b> si crees que es niña. Escribe tu nombre y toca una estrella.</p>
+    <input id="nombreVoto" type="text" placeholder="Tu nombre" maxlength="60" autocomplete="name" aria-label="Tu nombre">
+    <div class="estrellas">
+      <svg class="base" viewBox="0 0 120 40" preserveAspectRatio="none"><use href="#nube" x="-10" y="-12" width="140" height="56"/></svg>
+      <button class="voto" data-equipo="nina" aria-label="Votar: niña">
+        <svg viewBox="0 0 100 100"><g class="estrella">
+          <use href="#estrella" fill="url(#gr)" stroke="#f2b3c7"/>
+          <use href="#cara" x="30" y="46" width="40" height="24"/>
+          <g transform="translate(50 14)">
+            <path d="M0 0 C -14 -14 -24 -4 -16 4 C -10 9 -3 3 0 0Z" fill="#e58fae"/>
+            <path d="M0 0 C 14 -14 24 -4 16 4 C 10 9 3 3 0 0Z" fill="#e58fae"/>
+            <circle r="4" fill="#d67a9c"/>
+          </g>
+        </g></svg>
+        <span>Niña</span>
+      </button>
+      <button class="voto" data-equipo="nino" aria-label="Votar: niño">
+        <svg viewBox="0 0 100 100"><g class="estrella">
+          <use href="#estrella" fill="url(#ga)" stroke="#a9cdf0"/>
+          <use href="#cara" x="30" y="46" width="40" height="24"/>
+          <g transform="translate(50 79)">
+            <path d="M0 0 L -13 -7 Q -16 0 -13 7 Z" fill="#6f9fd0"/>
+            <path d="M0 0 L 13 -7 Q 16 0 13 7 Z" fill="#6f9fd0"/>
+            <circle r="3.5" fill="#5a8cc0"/>
+          </g>
+        </g></svg>
+        <span>Niño</span>
+      </button>
+    </div>
+    <p id="mensajeVoto" role="status"></p>
+
+    <div class="marcador" id="marcador" hidden>
+      <h3>Así van los votos</h3>
+      <div class="barra"><i id="barraNina" style="width:50%"></i><i id="barraNino" style="width:50%"></i></div>
+      <div class="leyenda"><span class="l1" id="pctNina">Niña 50%</span><span class="l2" id="pctNino">Niño 50%</span></div>
+      <p class="total" id="totalVotos"></p>
+    </div>
+  </section>
+
+  <!-- ================= 5. UBICACIÓN ================= -->
+  <section>
+    <div class="plataforma">
+      <svg id="cohete" viewBox="0 0 100 170" role="img" aria-label="Cohete">
+        <path class="fuego" d="M38 122 Q50 172 62 122 Z" fill="url(#gy)"/>
+        <path class="fuego" d="M43 122 Q50 152 57 122 Z" fill="url(#gd)"/>
+        <path d="M30 86 L12 114 Q10 124 22 122 L34 114 Z" fill="url(#gm)"/>
+        <path d="M70 86 L88 114 Q90 124 78 122 L66 114 Z" fill="url(#gm)"/>
+        <path d="M50 6 C 73 26 77 72 70 116 L 30 116 C 23 72 27 26 50 6 Z" fill="url(#gn)"/>
+        <path d="M50 6 C 60 15 66 26 69 38 L 31 38 C 34 26 40 15 50 6 Z" fill="url(#gl)"/>
+        <rect x="34" y="112" width="32" height="10" rx="4" fill="url(#gd)"/>
+        <circle cx="50" cy="66" r="16" fill="#fff"/>
+        <circle cx="50" cy="66" r="12" fill="url(#gl2)"/>
+        <ellipse cx="45" cy="61" rx="4" ry="3" fill="#fff" opacity=".8"/>
+      </svg>
+    </div>
+    <h2>¿Dónde?</h2>
+    <a class="btn-mapa" id="btnMapa" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      Ver ubicación en el mapa
+    </a>
+  </section>
+
+  <!-- ================= 6. CIERRE ================= -->
+  <section class="final">
+    <p class="confirma">
+      <strong>Por favor, confirma tu asistencia</strong>
+      ¡Nos encantará contar contigo!
+    </p>
+    <p class="puff">¡Te esperamos!</p>
+    <p class="firma" id="firma"></p>
+    <p class="pista">Psst… toca el sol, las estrellas y revienta los globos 🎈</p>
+  </section>
+</main>
+
+<script>
+/* ================================================
+   CONFIGURACIÓN — edita aquí tus datos
+   ================================================ */
+const CONFIG = {
+  mapa: "https://maps.app.goo.gl/Hwitgxeba6m7suDn6",
+  fecha: "2026-10-25T15:00:00-06:00",
+  firma: "Con cariño, los futuros papás",
+  volumen: 0.6,         // 0 a 1
+  // URL de tu Apps Script (Google Sheets):
+  sheets: "https://script.google.com/macros/s/AKfycbwiJ1f2BLjEpZsnPJ_0J3iJfGhPyMgwA2o9BWp6or4BKnZQt2Ye-MZleo2KYZNuqEfD/exec"
+};
+
+const $ = id => document.getElementById(id);
+const btnMapa = $("btnMapa");
+if (btnMapa) btnMapa.href = CONFIG.mapa;
+if ($("firma")) $("firma").textContent = CONFIG.firma;
+
+/* ===== Música ===== */
+const audio = $("cancion"), btnMusica = $("musica");
+audio.volume = CONFIG.volumen;
+function reproducir(){
+  audio.play().then(() => { btnMusica.classList.add("sonando"); btnMusica.classList.remove("pausa"); }).catch(() => {});
+}
+btnMusica.addEventListener("click", () => {
+  if (audio.paused) reproducir();
+  else { audio.pause(); btnMusica.classList.remove("sonando"); btnMusica.classList.add("pausa"); }
+});
+
+/* ===== Confeti ===== */
+const cv = $("confeti"), ctx = cv.getContext("2d");
+let piezas = [];
+function ajustar(){ cv.width = innerWidth; cv.height = innerHeight; }
+addEventListener("resize", ajustar); ajustar();
+const PALETA = {
+  neutro: ["#c9b8ee","#a08ad9","#bfe8d8","#86cbb0","#ffe39a","#f0c25a","#ffd3b5","#ffffff"],
+  nina:   ["#f7c3d3","#e396b0","#fbe0e8","#ffe39a","#ffffff"],
+  nino:   ["#b9d8f5","#84b3e0","#e1effc","#ffe39a","#ffffff"]
+};
+function explotar(x, y, n = 80, pal = "neutro", fuerza = 9){
+  const cols = PALETA[pal];
+  for (let i = 0; i < n; i++){
+    const a = Math.random() * Math.PI * 2, v = Math.random() * fuerza + 2;
+    piezas.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 3,
+      r: Math.random() * 6 + 4, rot: Math.random() * 6, vr: (Math.random() - .5) * .3,
+      c: cols[Math.random() * cols.length | 0], vida: 1, forma: ["circ","estrella","circ","rect"][Math.random() * 4 | 0] });
+  }
+}
+function estrellita(r){
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++){
+    const rad = i % 2 ? r * .45 : r, a = i * Math.PI / 5 - Math.PI / 2;
+    ctx.lineTo(Math.cos(a) * rad, Math.sin(a) * rad);
+  }
+  ctx.closePath(); ctx.fill();
+}
+(function animar(){
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  piezas = piezas.filter(p => p.vida > 0);
+  for (const p of piezas){
+    p.vy += .17; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.vida -= .008;
+    ctx.save(); ctx.globalAlpha = Math.max(p.vida, 0); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillStyle = p.c;
+    if (p.forma === "circ"){ ctx.beginPath(); ctx.arc(0, 0, p.r / 1.6, 0, 7); ctx.fill(); }
+    else if (p.forma === "estrella") estrellita(p.r * .85);
+    else ctx.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2);
+    ctx.restore();
+  }
+  requestAnimationFrame(animar);
+})();
+const centro = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+
+/* ===== Móvil de gotitas colgando del arcoíris ===== */
+(function crearMovil(){
+  const g = $("movil"), ns = "http://www.w3.org/2000/svg";
+  const hebras = [[34,70,"#c9b8ee"],[58,104,"#ffe39a"],[82,80,"#bfe8d8"],[278,84,"#ffd3b5"],[302,108,"#c9b8ee"],[326,72,"#bfe8d8"]];
+  const grad = {"#c9b8ee":"url(#gl)","#ffe39a":"url(#gy)","#bfe8d8":"url(#gm)","#ffd3b5":"url(#gd)"};
+  hebras.forEach(([x, largo, c], i) => {
+    const h = document.createElementNS(ns, "g");
+    h.setAttribute("class", "hebra");
+    h.style.transformOrigin = `${x}px 228px`;
+    h.style.animationDelay = `${-i * .7}s`;
+    const y0 = 228, y1 = y0 + largo;
+    let s = `<line x1="${x}" y1="${y0}" x2="${x}" y2="${y1}" stroke="#d8cfe9" stroke-width="1.2"/>`;
+    for (let y = y0 + 14; y < y1 - 6; y += 16) s += `<circle cx="${x}" cy="${y}" r="3.6" fill="${grad[c]}"/>`;
+    s += `<path d="M${x} ${y1 - 4} C ${x + 9} ${y1 + 8} ${x + 8} ${y1 + 18} ${x} ${y1 + 18} C ${x - 8} ${y1 + 18} ${x - 9} ${y1 + 8} ${x} ${y1 - 4} Z" fill="${grad[c]}"/>`;
+    h.innerHTML = s;
+    g.appendChild(h);
+  });
+})();
+
+/* ===== Cosas que reaccionan al tocarlas ===== */
+function rebotar(el, pal){
+  el.classList.remove("rebota"); void el.getBoundingClientRect(); el.classList.add("rebota");
+  const [x, y] = centro(el); explotar(x, y, 22, pal, 5);
+}
+document.querySelectorAll(".sol, .burbuja").forEach(el => {
+  el.style.cursor = "pointer";
+  el.addEventListener("pointerdown", () => rebotar(el, "neutro"));
+  el.addEventListener("animationend", e => { if (e.animationName === "rebote") el.classList.remove("rebota"); });
+});
+document.querySelector(".sol").style.transformBox = "fill-box";
+document.querySelector(".sol").style.transformOrigin = "center";
+
+/* ===== Globos de fondo ===== */
+const capa = $("globos");
+const TONOS = ["#c9b8ee","#bfe8d8","#ffe39a","#ffd3b5","#e2d8fa"];
+function crearGlobo(){
+  const c = TONOS[Math.random() * TONOS.length | 0], esc = .7 + Math.random() * .6;
+  const w = document.createElement("div");
+  w.className = "g-wrap";
+  w.style.left = (Math.random() * 92) + "vw";
+  w.style.animationDuration = (12 + Math.random() * 9) + "s";
+  w.style.setProperty("--c", c);
+  w.innerHTML = `<div class="bola" style="transform:scale(${esc});background:radial-gradient(circle at 32% 28%,#fff 0,${c} 45%,${c} 70%);animation-delay:-${Math.random()*3}s"><span class="hilo"></span></div>`;
+  w.addEventListener("pointerdown", () => { const [x, y] = centro(w.firstChild); explotar(x, y, 40, "neutro", 6); w.remove(); });
+  w.addEventListener("animationend", e => { if (e.target === w) w.remove(); });
+  capa.appendChild(w);
+}
+function iniciarGlobos(){
+  for (let i = 0; i < 5; i++) setTimeout(crearGlobo, 400 + i * 450);
+  setInterval(() => { if (capa.children.length < 9) crearGlobo(); }, 2000);
+}
+
+/* ===== Abrir la caja sorpresa ===== */
+const intro = $("intro"), caja = $("caja");
+caja.addEventListener("click", () => {
+  if (intro.classList.contains("abierta")) return;
+  reproducir();                                   // la música arranca con el toque
+  caja.classList.add("agita");
+  setTimeout(() => {
+    intro.classList.add("abierta");
+    const [x, y] = centro(caja);
+    explotar(x, y - 30, 180, "neutro", 15);
+    btnMusica.classList.add("ver");
+    iniciarGlobos();
+    intro.classList.add("fuera");
+  }, 450);
+}, { once: false });
+
+/* ===== Cuenta regresiva ===== */
+const meta = new Date(CONFIG.fecha).getTime();
+function tic(){
+  let d = Math.max(0, meta - Date.now());
+  const v = [Math.floor(d / 864e5), Math.floor(d / 36e5) % 24, Math.floor(d / 6e4) % 60, Math.floor(d / 1e3) % 60];
+  ["d","h","m","s"].forEach((id, i) => $(id).textContent = String(v[i]).padStart(2, "0"));
+}
+tic(); setInterval(tic, 1000);
+
+/* ===== Votación (Google Sheets) + marcador en vivo ===== */
+const inputNombre = $("nombreVoto"), msg = $("mensajeVoto");
+const botonesVoto = document.querySelectorAll(".voto");
+let equipo = null, votoGuardado = null;
+try {
+  equipo = localStorage.getItem("bs-equipo");
+  votoGuardado = localStorage.getItem("bs-voto-enviado");
+  inputNombre.value = localStorage.getItem("bs-nombre") || "";
+} catch(e){}
+
+function marcar(eq){
+  botonesVoto.forEach(b => {
+    b.classList.toggle("elegido", b.dataset.equipo === eq);
+    b.classList.toggle("apagado", b.dataset.equipo !== eq);
+  });
+  if (eq === "nino"){ msg.textContent = "¡Team niño! Te esperamos de azul 💙"; msg.style.color = "var(--azul-o)"; }
+  else { msg.textContent = "¡Team niña! Te esperamos de rosa 💗"; msg.style.color = "var(--rosa-o)"; }
+}
+const sheetsListo = () => CONFIG.sheets && CONFIG.sheets.startsWith("https://");
+
+function pintarMarcador(nina, nino){
+  const total = nina + nino;
+  if (!total){ $("marcador").hidden = false; $("totalVotos").textContent = "Aún no hay votos. ¡Sé el primero!"; return; }
+  const pNina = Math.round(nina / total * 100), pNino = 100 - pNina;
+  $("barraNina").style.width = pNina + "%"; $("barraNino").style.width = pNino + "%";
+  $("pctNina").textContent = `Niña ${pNina}%`; $("pctNino").textContent = `Niño ${pNino}%`;
+  $("totalVotos").textContent = total === 1 ? "1 voto" : `${total} votos`;
+  $("marcador").hidden = false;
+}
+function cargarMarcador(){
+  if (!sheetsListo()) return;
+  fetch(CONFIG.sheets + "?conteo=1").then(r => r.json())
+    .then(d => { if (typeof d.nina === "number") pintarMarcador(d.nina, d.nino); })
+    .catch(() => {});                              // si falla, el marcador simplemente no aparece
+}
+function guardarVoto(nombre, eq){
+  const clave = nombre.toLowerCase() + "|" + eq;
+  if (votoGuardado === clave || !sheetsListo()) return;
+  fetch(CONFIG.sheets, { method: "POST", mode: "no-cors",
+    body: new URLSearchParams({ nombre, equipo: eq === "nino" ? "Niño" : "Niña" }) })
+  .then(() => {
+    votoGuardado = clave;
+    try { localStorage.setItem("bs-voto-enviado", clave); } catch(e){}
+    setTimeout(cargarMarcador, 1500);
+  }).catch(() => {});
+}
+botonesVoto.forEach(b => b.addEventListener("click", () => {
+  const nombre = inputNombre.value.trim();
+  if (!nombre){
+    inputNombre.classList.remove("error"); void inputNombre.offsetWidth;
+    inputNombre.classList.add("error"); inputNombre.focus();
+    msg.textContent = "Escribe tu nombre para guardar tu voto"; msg.style.color = "var(--tinta)";
+    return;
+  }
+  equipo = b.dataset.equipo;
+  try { localStorage.setItem("bs-equipo", equipo); localStorage.setItem("bs-nombre", nombre); } catch(e){}
+  const est = b.querySelector(".estrella");
+  rebotar(b.querySelector("svg"), equipo);
+  const [x, y] = centro(b); explotar(x, y, 110, equipo, 12);
+  marcar(equipo);
+  guardarVoto(nombre, equipo);
+}));
+inputNombre.addEventListener("input", () => inputNombre.classList.remove("error"));
+if (equipo) marcar(equipo);
+cargarMarcador();
+
+/* ===== Cohete: despega al abrir el mapa ===== */
+const cohete = $("cohete");
+btnMapa.addEventListener("click", () => {
+  cohete.classList.add("vuela");
+  const [x, y] = centro(cohete); explotar(x, y + 60, 40, "neutro", 6);
+  setTimeout(() => cohete.classList.remove("vuela"), 2600);
+});
+cohete.addEventListener("pointerdown", () => btnMapa.click());
+</script>
+</body>
+</html>
